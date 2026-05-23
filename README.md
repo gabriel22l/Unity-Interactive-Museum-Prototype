@@ -145,9 +145,9 @@ Managers are intentionally not implemented as singletons. Serialized references 
 - Betzaida Vera
 - Cynthia Pérez
 
-### Acknowledgements
+### Presentation Opportunity, Academic Coordination & Creative Input
 
-- Maestro Elías Rivera Custodio - presentation opportunity, academic coordination & creative input
+- Maestro Elías Rivera Custodio
 
 ### Third-Party Assets
 
