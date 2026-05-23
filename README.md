@@ -93,6 +93,16 @@ Managers are intentionally not implemented as singletons. Serialized references 
 
 ## Screenshots
 
+![Forest](/Images/Screenshot_0.png)
+
+![Enemy](/Images/Screenshot_4.png)
+
+![Inventory](/Images/Screenshot_2.png)
+
+![Museum](/Images/MuseoGif.gif)
+
+![Museum](/Images/Screenshot_1.png)
+
 ---
 
 ## Project Notes
