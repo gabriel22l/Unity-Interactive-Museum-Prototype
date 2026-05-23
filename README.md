@@ -23,7 +23,7 @@ Unity 6 educational exploration prototype combining an interactive museum exhibi
 
 The project was developed over approximately 8 weeks both as an educational presentation piece and a systems-focused learning project. It was built in Unity 6 using C# and emphasizes modular gameplay systems, event-driven communication, and data-driven content.
 
-**Project Status:** Complete prototype (archived)
+**Project Status:** Complete prototype 
 
 ---
 
@@ -119,8 +119,6 @@ Managers are intentionally not implemented as singletons. Serialized references 
 ## Project Notes
 
 - Developed as a presentation-focused educational prototype
-- Solo programming implementation
-- Art assets developed by project collaborators
 - Approximately 8 weeks of development
 
 ---
