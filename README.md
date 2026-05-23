@@ -51,7 +51,7 @@ The project was developed over approximately 8 weeks both as an educational pres
 - Drag-and-drop inventory UI
 - Event-driven communication
 - Audio feedback system
-- Modular interaction framework
+- Interaction system
 
 ---
 
