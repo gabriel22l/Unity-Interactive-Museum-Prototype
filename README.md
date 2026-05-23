@@ -93,15 +93,26 @@ Managers are intentionally not implemented as singletons. Serialized references 
 
 ## Screenshots
 
-![Forest](/Images/Screenshot_0.png)
+### Main Scene
 
-![Enemy](/Images/Screenshot_4.png)
+<table align="center">
+  <tr>
+    <td><img src="Images/Screenshot_0.png" alt="Forest" width="500"/></td>
+    <td><img src="Images/Screenshot_4.png" alt="Enemy" width="500"/></td>
+  </tr>
+  <tr>
+    <td colspan="2" align="center"><img src="Images/Screenshot_2.png" alt="Inventory" width="500"/></td>
+  </tr>
+</table>
 
-![Inventory](/Images/Screenshot_2.png)
+### Museum
 
-![Museum](/Images/MuseoGif.gif)
-
-![Museum](/Images/Screenshot_1.png)
+<table align="center">
+  <tr>
+    <td><img src="Images/MuseoGif.gif" alt="Museum Gif" width="500"/></td>
+    <td><img src="Images/Screenshot_1.png" alt="Museum" width="500"/></td>
+  </tr>
+</table>
 
 ---
 
@@ -138,7 +149,7 @@ Managers are intentionally not implemented as singletons. Serialized references 
 
 ### Acknowledgements
 
-- Maestro Elías Rivera Custodio - presentation opporunity, academic coordination & creative input
+- Maestro Elías Rivera Custodio - presentation opportunity, academic coordination & creative input
 
 ### Third-Party Assets
 
