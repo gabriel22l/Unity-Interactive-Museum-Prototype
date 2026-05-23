@@ -119,12 +119,16 @@ Managers are intentionally not implemented as singletons. Serialized references 
 
 ### Programming, Systems Design & Implementation
 
-Gabriel Guzmán
+- Gabriel Guzmán
 
 ### 3D Modeling & Art Direction
 
 - Betzaida Vera
 - Cynthia Pérez
+
+### Acknowledgements
+
+- Maestro Elías Rivera Custodio - presentation opporunity, academic coordination & creative input
 
 ### Third-Party Assets
 
