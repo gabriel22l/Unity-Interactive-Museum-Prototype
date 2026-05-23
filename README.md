@@ -97,11 +97,11 @@ Managers are intentionally not implemented as singletons. Serialized references 
 
 <table align="center">
   <tr>
-    <td><img src="Images/Screenshot_0.png" alt="Forest" width="500"/></td>
-    <td><img src="Images/Screenshot_4.png" alt="Enemy" width="500"/></td>
+    <td><img src="Images/Screenshot_0.png" alt="Forest" height="250"/></td>
+    <td><img src="Images/Screenshot_4.png" alt="Enemy" height="250"/></td>
   </tr>
   <tr>
-    <td colspan="2" align="center"><img src="Images/Screenshot_2.png" alt="Inventory" width="500"/></td>
+    <td colspan="2" align="center"><img src="Images/Screenshot_2.png" alt="Inventory" height="250"/></td>
   </tr>
 </table>
 
@@ -109,8 +109,8 @@ Managers are intentionally not implemented as singletons. Serialized references 
 
 <table align="center">
   <tr>
-    <td><img src="Images/MuseoGif.gif" alt="Museum Gif" width="500"/></td>
-    <td><img src="Images/Screenshot_1.png" alt="Museum" width="500"/></td>
+    <td><img src="Images/MuseoGif.gif" alt="Museum Gif" height="250"/></td>
+    <td><img src="Images/Screenshot_1.png" alt="Museum" height="250"/></td>
   </tr>
 </table>
 
