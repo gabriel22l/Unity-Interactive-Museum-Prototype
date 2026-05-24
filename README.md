@@ -71,7 +71,7 @@ Enemy behavior is implemented as a single-class finite state machine with four s
 
 ### Dependency Management
 
-Managers are intentionally not implemented as singletons. Serialized references live on prefab-level objects, keeping scene setup minimal and system dependencies explicit. A `PlayerContext` object acts as a lightweight access point for subsystems that need cross-system references (inventory, health, UI, audio).
+Managers are intentionally not implemented as singletons. Serialized references live on prefab-level objects, keeping scene setup minimal and system dependencies explicit. A `PlayerContext` object centralizes player-related system references, allowing external systems to access what they need — inventory, health, UI — without direct dependencies on individual player components.
 
 ---
 
