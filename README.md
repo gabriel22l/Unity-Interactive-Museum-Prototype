@@ -78,7 +78,7 @@ Managers are intentionally not implemented as singletons. Serialized references 
 
 | System | Key Components | Notes |
 |---|---|---|
-| Interaction | `IInteractable`, `PlayerInteraction`, `WorldSpaceInteractableIndicator` | Proximity-based, targets closest interactable |
+| Interaction | `IInteractable`, `PlayerInteraction`, `InteractableIndicatorController` | Proximity-based, targets closest interactable |
 | Inventory | `InventoryController`, `InventoryViewModel`, `InventoryUIController`, `DragAndDrop` | Fixed slots, stackable items, SO-defined item data |
 | Objective | `ObjectiveTracker`, `ObjectiveSO`, `Objective` | Data-driven, event-based progress, supports sequencing |
 | Enemy AI | `EnemyAIController` | Single-class FSM, OverlapSphere + raycast detection |
