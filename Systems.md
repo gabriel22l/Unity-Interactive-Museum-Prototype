@@ -1,9 +1,9 @@
-# Architecture
+# Systems
 
 ## Table of Contents
 
 1. [Overview](#1-overview)
-2. [Runtime architecture](#2-runtime-architecture)
+2. [Runtime structure](#2-runtime-structure)
 3. [Project structure](#3-project-structure)
 4. [Core systems](#4-core-systems)
     - [4.1 Game orchestration](#41-game-orchestration-gamemanager)
@@ -22,7 +22,7 @@
     - [4.14 VR integration](#414-vr-integration)
 5. [Cross-system relationships](#5-cross-system-relationships)
 6. [Data-driven design](#6-data-driven-design)
-7. [Architectural patterns used](#7-architectural-patterns-used)
+7. [Design patterns used](#7-design-patterns-used)
 8. [Technical constraints and design assumptions](#8-technical-constraints-and-design-assumptions)
 9. [Summary](#9-summary)
 
@@ -30,7 +30,7 @@
 
 ## 1. Overview
 
-Unity 6 3D educational prototype: an interactive museum of pre-Hispanic cultures with a separate artifact-collection gameplay scene. It is built from Unity MonoBehaviours, ScriptableObject data definitions and event-driven communication between systems, with no singletons or global state.
+Unity 6 3D educational prototype: an interactive museum of pre-Hispanic cultures with a separate artifact-collection gameplay scene. It is built from Unity MonoBehaviours, ScriptableObject data definitions and event-driven communication between systems, with no singletons.
 
 The project follows a loosely coupled, component-driven design:
 
@@ -42,9 +42,9 @@ The project follows a loosely coupled, component-driven design:
 - Data definitions such as items and objectives are authored as ScriptableObjects.
 - The museum scene also runs in VR, reusing the same player systems through a Prefab Variant of the desktop player.
 
-This architecture makes the project easy to extend for additional museum objects, objectives, or enemy behaviors without introducing global state.
+This approach makes the project easy to extend for additional museum objects, objectives, or enemy behaviors.
 
-## 2. Runtime architecture
+## 2. Runtime structure
 
 At runtime, the main flow is:
 
@@ -491,14 +491,14 @@ The project is built around a few key dependency flows:
 
 ## 6. Data-driven design
 
-A significant architectural feature of the project is its use of ScriptableObjects:
+A significant design feature of the project is its use of ScriptableObjects:
 
 - `itemDataSO` defines all item metadata.
 - `ObjectiveSO` defines objective configuration.
 
 This lets the project create inventory and objective content without hard-coded checks in scene logic. It also makes the project easier to extend for new item types or new objectives.
 
-## 7. Architectural patterns used
+## 7. Design patterns used
 
 - Event-driven communication: inventory updates, objective completion, UI state changes, and health events.
 - Component-driven gameplay: player and world objects are mostly composed from Unity components.
@@ -514,7 +514,7 @@ This lets the project create inventory and objective content without hard-coded 
 - No backend or save system is present.
 - The game is scene-local and prefab-based, not modularly separated into services or assemblies.
 - Most communication is synchronous and direct, not asynchronous or message-bus based.
-- The game is designed as a presentation prototype, so runtime architecture favors simplicity and readability over enterprise-scale patterns.
+- The game is designed as a presentation prototype, so runtime structure favors simplicity and readability.
 - VR support covers the museum scene only (standalone mobile build profile). The gameplay scene and main menu are not VR-compatible.
 - Gamepad support is partial: inventory drag-and-drop and hover info are mouse-only.
 - Resolution settings are not persisted between sessions.
