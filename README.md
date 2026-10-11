@@ -136,7 +136,7 @@ The VR player and VR Canvas are Prefab Variants of their desktop counterparts, r
 
 - [Architecture](Docs/Architecture.md)
 - [VR Integration](Docs/VR_Integration.md)
-- [ChangeLog](Docs/CHANGELOG.md)
+- [ChangeLog](CHANGELOG.md)
 
 ---
 
