@@ -16,12 +16,17 @@ public class GameManager : MonoBehaviour
     [SerializeField] private ObjectiveTracker objectiveTracker;
     
     [SerializeField] private bool gameOverOnWin = true;
-    private void Awake()
+    
+    [Header("Pause Control")]
+    [SerializeField] private bool allowPause = true;
+    private IPauseControl pauseControl;
+    private void Start()
     {
         playerContext.Initialize(uiController, interactableIndicatorController);
         
-        invVM = new InventoryViewModel(playerContext.InventoryController);
-        uiController.Initialize(playerContext, invVM, objectiveTracker);
+        pauseControl = new PauseControl(allowPause);
+        pauseControl.RequestPause(false);
+        uiController.Initialize(playerContext, objectiveTracker, pauseControl);
 
         playerContext.Health.OnDeath += HandleGameOver;
         
@@ -29,6 +34,7 @@ public class GameManager : MonoBehaviour
     }
     private void OnDisable()
     {
+        pauseControl?.RequestPause(false);
         if(playerContext?.Health)
             playerContext.Health.OnDeath -= HandleGameOver;
         if(objectiveTracker != null)
@@ -41,8 +47,7 @@ public class GameManager : MonoBehaviour
             Debug.Log($"{nameof(objectiveTracker)} could not be found");
             return;
         }
-        ObjectiveContext objectiveContext = new ObjectiveContext();
-        objectiveContext.Inventory = playerContext.InventoryController;
+        ObjectiveContext objectiveContext = new ObjectiveContext(playerContext);
         objectiveTracker.OnAllObjectivesCompleted += HandleWin;
         objectiveTracker.Initialize(objectiveContext);
     }
@@ -50,14 +55,14 @@ public class GameManager : MonoBehaviour
     {
         if(isGameOver) 
             return;
-        uiController.OpenGameOverMenu();
+        uiController.ShowLoseScreen();
         isGameOver = true;
     }
     private void HandleWin()
     {
         if (isGameOver || !gameOverOnWin)
             return;
-        uiController.OpenWinGameOverMenu();
+        uiController.ShowWinScreen();
         isGameOver = true;
         playerContext.Health?.SetCanTakeDamage(false);
     }

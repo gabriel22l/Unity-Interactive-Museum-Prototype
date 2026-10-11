@@ -30,4 +30,8 @@ public abstract class Objective
 public class ObjectiveContext
 {
     public InventoryController Inventory;
+    public ObjectiveContext(PlayerContext playerContext)
+    {
+        Inventory = playerContext.InventoryController;
+    }
 }

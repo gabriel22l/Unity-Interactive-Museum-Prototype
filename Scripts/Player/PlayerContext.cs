@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class PlayerContext : MonoBehaviour
@@ -17,7 +18,12 @@ public class PlayerContext : MonoBehaviour
     public PlayerViewController PlayerViewController => playerViewController;
     public Health Health => health;
     public AudioEmitter AudioEmitter => audioEmitter;
-    
+    public InventoryViewModel InventoryViewModel { get; private set; }
+
+    private void Awake()
+    {
+        InventoryViewModel = new InventoryViewModel(inventoryController);
+    }
     public void Initialize(UIController uiController, InteractableIndicatorController interactableIndicatorController)
     {
         this.UIController = uiController;

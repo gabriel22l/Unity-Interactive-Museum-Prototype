@@ -14,6 +14,6 @@ public class InteractableInfoPanel : MonoBehaviour, IInteractable
         }
         
         UIController uiController = interactionContext.PlayerContext.UIController;
-        uiController.OpenInfoPanelMenu(itemData);
+        uiController.OpenInfoPanel(itemData);
     }
 }

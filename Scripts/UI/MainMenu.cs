@@ -2,44 +2,55 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.SceneManagement;
+using System;
 
-public class MainMenu : MonoBehaviour
+public class MainMenu : MonoBehaviour, IUIPageManager
 {
-    [SerializeField]
-    private GameObject actionTextPrefab;
+    [SerializeField] private GameObject actionTextPrefab;
     [SerializeField] private InputActionAsset inputAsset;
     [SerializeField] private GameObject controlsContainer;
     [SerializeField] private GameObject mainMenuPage;
     [SerializeField] private GameObject controlsPage;
     [SerializeField] private GameObject playPage;
+    [SerializeField] private GameObject optionsPage;
     private GameObject currentPage;
 
     private List<GameObject> inputTexts;
+
+    public event Action OnPageChanged;
+    public event Action OnUIClosed;
+    public GameObject CurrentPage => currentPage;
+
     private void Awake()
     {
         if(controlsPage != null) controlsPage.SetActive(false);
         if(mainMenuPage != null) mainMenuPage.SetActive(false);
         if(playPage != null) playPage.SetActive(false);
+        if(optionsPage != null) optionsPage.SetActive(false);
         SwitchActivePage(mainMenuPage);
     }
+
     public void LoadScene(string sceneName)
     {
-        Time.timeScale = 1;
-        SceneManager.LoadScene(sceneName);
+        ApplicationController.LoadScene(sceneName);
     }
+
     public void ExitGame()
     {
-        #if UNITY_EDITOR 
-        UnityEditor.EditorApplication.isPlaying = false;
-  #endif
-        Application.Quit();
+        ApplicationController.ExitGame();
     }
+
+    public void ReloadScene()
+    {
+        ApplicationController.ReloadScene();
+    }
+
     public void ShowControlsPage()
     {
         SwitchActivePage(controlsPage);
         if(inputTexts == null || inputTexts.Count == 0) GenerateInputTexts();
     }
+
     private void GenerateInputTexts()
     {
         inputTexts = new List<GameObject>();
@@ -67,24 +78,29 @@ public class MainMenu : MonoBehaviour
             }
         }
     }
+
     public void ShowPlayPage()
     {
         SwitchActivePage(playPage);
     }
+
     public void ReturnToMain()
     {
         SwitchActivePage(mainMenuPage);
     }
+
     private void SwitchActivePage(GameObject page)
     {
         if (page == null || page == currentPage) return;
         currentPage?.SetActive(false);
         page.SetActive(true);
         currentPage = page;
+        
+        OnPageChanged?.Invoke();
     }
-    public void ReloadScene()
+
+    public void ShowOptionsPage()
     {
-        Time.timeScale = 1;
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        SwitchActivePage(optionsPage);
     }
 }
