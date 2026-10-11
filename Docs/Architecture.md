@@ -1,5 +1,33 @@
 # Architecture
 
+## Table of Contents
+
+1. [Overview](#1-overview)
+2. [Runtime architecture](#2-runtime-architecture)
+3. [Project structure](#3-project-structure)
+4. [Core systems](#4-core-systems)
+    - [4.1 Game orchestration](#41-game-orchestration-gamemanager)
+    - [4.2 Player context and shared access](#42-player-context-and-shared-access-playercontext)
+    - [4.3 Input and control flow](#43-input-and-control-flow-playerinput)
+    - [4.4 Player movement and camera view](#44-player-movement-and-camera-view-playermovement-playermovementfp-playerviewcontroller)
+    - [4.5 Interaction system](#45-interaction-system-playerinteraction-iinteractable-indicator-ui)
+    - [4.6 Inventory system](#46-inventory-system-inventorycontroller-inventoryuicontroller-inventoryviewmodel-inventoryslot-itemdataso)
+    - [4.7 Objective system](#47-objective-system-objectivetracker-objective-objectiveso-collectartifactsobjective)
+    - [4.8 Health and damage system](#48-health-and-damage-system-health-enemydamage-uihealthbar-playerdamagefeedback)
+    - [4.9 Enemy AI system](#49-enemy-ai-system-enemyaicontroller)
+    - [4.10 Throwable/distraction mechanics](#410-throwabledistraction-mechanics-offeringprojectile)
+    - [4.11 Audio system](#411-audio-system-audioemitter-footstepaudioevents)
+    - [4.12 UI and menu system](#412-ui-and-menu-system-uicontroller-menucontroller-mainmenu-menuresolutiondropdown-objectiveui-uihealthbar)
+    - [4.13 Application services](#413-application-services-applicationcontroller)
+    - [4.14 VR integration](#414-vr-integration)
+5. [Cross-system relationships](#5-cross-system-relationships)
+6. [Data-driven design](#6-data-driven-design)
+7. [Architectural patterns used](#7-architectural-patterns-used)
+8. [Technical constraints and design assumptions](#8-technical-constraints-and-design-assumptions)
+9. [Summary](#9-summary)
+
+---
+
 ## 1. Overview
 
 Unity 6 3D educational prototype: an interactive museum of pre-Hispanic cultures with a separate artifact-collection gameplay scene. It is built from Unity MonoBehaviours, ScriptableObject data definitions and event-driven communication between systems, with no singletons or global state.
@@ -35,7 +63,7 @@ At runtime, the main flow is:
 The game logic lives primarily under `Assets/Scripts` and is grouped by feature:
 
 - `GameManager.cs` – overall game orchestration
-- `ApplicationController.cs` – scene loading, resolution and exit helpers (static, at the scripts root)
+- `ApplicationController.cs` – scene loading, resolution, cursor state and exit helpers (static, at the scripts root)
 - `PauseControl.cs`, `IPauseControl.cs` – pause state, owned by `GameManager`
 - `VR/` – VR-only helper and platform fix
 - `Player/` – input, movement, view switching, animation integration
@@ -55,13 +83,13 @@ File: `Assets/Scripts/GameManager.cs`
 
 What it does:
 - Connects the main game systems at startup.
-- Initializes `PlayerContext`, `InventoryViewModel`, `UIController`, and `ObjectiveTracker`.
+- Initializes `PlayerContext`, `UIController`, `ObjectiveTracker` and `PauseControl`.
 - Watches player death and objective completion.
 - Triggers win/lose menus.
-- Owns pause state through PauseControl (IPauseControl), which UIController uses to request and release pauses.
+- Owns pause state through `PauseControl` (`IPauseControl`), which `UIController` uses to request and release pauses.
 
 How it does it:
-- Runs in `Awake()` and subscribes to `Health.OnDeath` and `ObjectiveTracker.OnAllObjectivesCompleted`.
+- Runs in `Start()` and subscribes to `Health.OnDeath` and `ObjectiveTracker.OnAllObjectivesCompleted`.
 - Creates `ObjectiveContext` and passes the inventory into the objective system.
 - Sets `isGameOver` to prevent duplicate end states.
 
@@ -81,6 +109,7 @@ File: `Assets/Scripts/Player/PlayerContext.cs`
 What it does:
 - Acts as the central access point for player-related systems.
 - Gives other systems a single place to reach the player's input, inventory, interaction, view, health, and audio references.
+- Creates `InventoryViewModel` in `Awake()`.
 
 How it does it:
 - Exposes serialized subsystem references as properties.
@@ -112,7 +141,7 @@ How it does it:
 - Subscribes to per-action callbacks including `Movement`, `Run`, `Interact`, `OpenPlayerMenu`, `OpenPauseMenu`, and `ToggleView`.
 - Raises game events such as `InteractEvent`, `OnPlayerMenuOpen`, `OnPauseMenuOpen`, `CloseUIPressed`, and `OnThrowInput`.
 - Disables or enables Cinemachine input controllers based on UI open state.
-- XR controller bindings (trigger for Interact, grip for CloseUI) are added to the existing actions, so no extra events or code paths are needed for VR.
+- XR controller bindings (Right Controller Primary Button for Interact, Menu Button for CloseUI/OpenPauseMenu) are added to the existing actions, so no extra events or code paths are needed for VR.
 
 Connected systems:
 - `UIController`
@@ -153,7 +182,7 @@ This system gives the player both immersive FP gameplay and a more observant TP 
 Files:
 - `Assets/Scripts/Interaction/PlayerInteraction.cs`
 - `Assets/Scripts/Interaction/IInteractable.cs`
-- `Assets/Scripts/Interaction/ItemIndicatorController.cs`
+- `Assets/Scripts/Interaction/InteractableIndicatorController.cs`
 - `Assets/Scripts/Interaction/InteractableInfoPanel.cs`
 
 What it does:
@@ -273,7 +302,7 @@ What it does:
 - Controls enemy patrol, chase, search, and idle behavior.
 - Detects the player via sphere overlap and field-of-view checks.
 - Uses navigation to move between points and respond to losing sight of the player.
-- Reacts to a thrown offering (OfferingProjectile) by returning to its spawn point and going idle.
+- Reacts to a thrown offering (`OfferingProjectile`) by returning to its spawn point and going idle.
 
 How it does it:
 - Uses a `NavMeshAgent` and a finite state machine with states: `Patrol`, `Chase`, `Search`, and `Idle`.
@@ -298,7 +327,7 @@ File: `Assets/Scripts/AI/OfferingProjectile.cs`
 
 What it does:
 - Represents a thrown offering object.
-- When it collides with an enemy, OnOfferingHit() sends the enemy back to its spawn point in the Idle state.
+- When it collides with an enemy, `OnOfferingHit()` sends the enemy back to its spawn point in the `Idle` state.
 
 How it does it:
 - `Initialize(force, direction)` applies impulse to a Rigidbody.
@@ -355,7 +384,7 @@ What it does:
 
 How it does it:
 - `UIController.Initialize()` subscribes to player input events and sets up the inventory, health and objective widgets.
-- `SetActiveMenu()` swaps the active menu, locks/unlocks the cursor, optionally requests a pause through IPauseControl when allowPause is set and raises `OnUIOpen` / `OnPageChanged`.
+- `SetActiveMenu()` swaps the active menu, locks/unlocks the cursor, requests a pause through `IPauseControl` when `allowPause` is set, and raises `OnUIOpen` / `OnPageChanged`.
 - `OnMenuClose()` hides the current menu, releases the pause request, restores the gameplay cursor state, and raises `OnUIClose` / `OnUIClosed`.
 - `OpenInfoPanelMenu(itemDataSO)` shows the info panel for an inspected item. The panel logic is the same on desktop and VR; only the Canvas differs.
 - `OpenLoseGameOverMenu()` and `OpenWinGameOverMenu()` trigger a delayed fade-in panel, and `isGameOver` blocks other menus afterwards.
@@ -404,6 +433,7 @@ What it does:
 - Holds non-UI application logic so menu MonoBehaviours only handle UI concerns.
 - Resolution: `GetAvailableResolutions()`, `SetResolution()`, `GetCurrentResolution()`, `GetNativeResolution()`.
 - Scene flow: `LoadScene()`, `ReloadScene()`, `ExitGame()`.
+- Cursor: `SetCursorState()`.
 
 How it does it:
 - It is a static class with no state, which fits the project's no-singleton approach.
@@ -432,7 +462,7 @@ How it does it:
 - The VR player is a Prefab Variant of the desktop Player, parented under the XR Origin (XR Rig). It reuses `PlayerContext`, `PlayerInput` and `PlayerInteraction`.
 - Desktop-only components are removed from the variant: `PlayerViewController`, `PlayerAnimation` and the FP/TP movement scripts.
 - Movement and turning come from the XRI Dynamic Move Provider (continuous move) and Snap Turn, with a locomotion vignette for comfort.
-- XR controller bindings are added to the existing input actions (trigger -> Interact, grip -> CloseUI), so no gameplay code changed.
+- XR controller bindings are added to the existing input actions (Right Controller Primary Button -> Interact, Menu Button -> CloseUI/OpenPauseMenu), so no gameplay code changed.
 - The info panel uses a separate world-space Canvas (prefab variant), which also accepts mouse/gamepad clicks for use without a headset.
 - `VRFollowCamera` keeps that Canvas in front of the head at a fixed offset. It uses frame-rate-independent exponential smoothing for position and rotation, updated in `LateUpdate()`.
 - `FixOpenXrDpad` is a runtime fix (`BeforeSceneLoad`, Windows/Editor only). OpenXR's D-Pad feature overrides the Input System `DPad` layout, so gamepads fail to register. When `DPad` is found to derive from `XRController`, the fix removes the layout, re-registers `DpadControl` and re-adds the affected devices.

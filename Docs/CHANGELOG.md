@@ -31,13 +31,13 @@ Versions are development milestones, not public releases.
 - Added `UINavigationSelector`: auto-selects the first interactable on page change, remembers the last selection per page, and re-selects when selection is lost
 - Added `UISelectableColorSetter`: applies the selected/highlighted colors to the selectables on each page
 - Updated `UIController` and `MainMenu` to raise the new page events
-- Refactored Pause handling, added `IPauseControl.cs`, `PauseControl.cs`, GameManager initializes and owns PauseController, UIController receives the IPauseController reference and requests pausing
 - Moved cursor visibility and state handling to a static method in `ApplicationController.cs`
 - Organization and readability improvements in `UIController.cs`
 
 **Architecture / Refactoring**
-- PlayerContext now initializes InventoryViewModel in Awake, GameManager now does initialization in Start instead of Awake
-- Encapsulated ObjectiveContext initialization in its constructor, simplifying objective system setup in GameManager.cs
+- `PlayerContext` now initializes `InventoryViewModel` in `Awake()`; `GameManager` now initializes in `Start()` instead of `Awake()`
+- Encapsulated `ObjectiveContext` initialization in its constructor, simplifying objective system setup in `GameManager.cs`
+- Refactored pause handling: added `IPauseControl.cs` and `PauseControl.cs`; `GameManager` initializes and owns `PauseControl`, and `UIController` receives the `IPauseControl` reference and requests pauses through it
 
 **Application / Builds**
 - Added the static `ApplicationController` (resolutions, scene loading, exit) and moved non-UI logic out of the menu classes
