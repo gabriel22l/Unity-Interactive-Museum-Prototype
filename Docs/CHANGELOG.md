@@ -5,7 +5,7 @@ Versions are development milestones, not public releases.
 
 **VR**
 - Added partial VR support: `Museum_VR` scene is functional and ready for a self-contained, single-scene build
-- Set up the XR stack: Unity 6.3 LTS (6000.3.8f1), XR Interaction Toolkit 3.2.3, OpenXR 1.16.1, Input System 1.18.0, XR Plugin Management 4.5.3 (installed as a dependency)
+- Set up the XR stack: Unity 6.3 LTS (6000.3.8f1), XR Interaction Toolkit 3.2.3, OpenXR 1.16.1, Input System 1.18.0, XR Plugin Management 4.5.3 (installed as a dependency), VIVE OpenXR Plugin 2.5.1
 - Integrated VR with the existing player systems: the VR player is a Prefab Variant of the desktop Player, child of the XR Origin (XR Rig)
     - Reuses `PlayerContext`, `PlayerInput` and `PlayerInteraction`
     - Removed desktop-only components (`PlayerViewController`, `PlayerAnimation`, FP/TP movement)

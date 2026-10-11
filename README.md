@@ -1,6 +1,6 @@
 # Unity Interactive Museum Prototype
 
-Unity 6 educational exploration prototype combining an interactive museum exhibit and artifact collection gameplay, featuring inventory management, objective tracking, interaction systems, and FSM-based enemy AI.
+Unity 6 educational exploration prototype combining an interactive museum exhibit and artifact collection gameplay, featuring inventory management, objective tracking, interaction systems, FSM-based enemy AI, and VR support.
 
 ## Table of Contents
 
@@ -11,9 +11,11 @@ Unity 6 educational exploration prototype combining an interactive museum exhibi
   - [Data-Driven Content](#data-driven-content)
   - [FSM Enemy AI](#fsm-enemy-ai)
   - [Dependency Management](#dependency-management)
+  - [Platform-Agnostic Systems](#platform-agnostic-systems)
 - [Core Systems](#core-systems)
 - [Screenshots](#screenshots)
 - [Project Notes](#project-notes)
+- [Documentation](#documentation)
 - [Technology Stack](#technology-stack)
 
 ---
@@ -33,6 +35,7 @@ The project was developed over approximately 8 weeks both as an educational pres
 - Artifact inspection
 - Cultural information display
 - Dedicated museum scene
+- VR support with continuous movement and snap turn
 
 ### Gameplay Experience
 
@@ -51,6 +54,7 @@ The project was developed over approximately 8 weeks both as an educational pres
 - Event-driven communication
 - Audio feedback system
 - Modular interaction framework
+- Gamepad support with automatic UI navigation
 
 ---
 
@@ -70,7 +74,11 @@ Enemy behavior is implemented as a single-class finite state machine with four s
 
 ### Dependency Management
 
-Managers are intentionally not implemented as singletons. Serialized references live on prefab-level objects, keeping scene setup minimal and system dependencies explicit. A `PlayerContext` object acts as a lightweight access point for subsystems that need cross-system references (inventory, health, UI, audio).
+Managers are intentionally not implemented as singletons. Serialized references live on prefab-level objects, keeping scene setup minimal and system dependencies explicit. A `PlayerContext` object acts as a lightweight access point for subsystems that need cross-system references (inventory, health, UI, audio). Non-UI application logic (scene loading, resolution, cursor state) lives in a static, stateless ApplicationController.
+
+### Platform-Agnostic Systems
+
+The VR player and VR Canvas are Prefab Variants of their desktop counterparts, reusing `PlayerContext`, `PlayerInput` and `PlayerInteraction` unchanged. Only desktop-specific components (camera view switching, character animation, FP/TP movement) are removed in the variant.
 
 ---
 
@@ -83,16 +91,17 @@ Managers are intentionally not implemented as singletons. Serialized references 
 | Objective | `ObjectiveTracker`, `ObjectiveSO`, `Objective` | Data-driven, event-based progress, supports sequencing |
 | Enemy AI | `EnemyAIController` | Single-class FSM, OverlapSphere + raycast detection |
 | Health | `Health`, `EnemyDamage` | |
-| Player | `PlayerInput`, `PlayerViewController`, `PlayerContext` | |
+| Player | `PlayerInput`, `PlayerViewController`, `PlayerContext` | Maps unified inputs (M&K, Gamepad, XR) to events |
+| UI | `UIController`, `UIHealthBar`, `ObjectiveUI`, `IUIPageManager` | Event-driven with automatic gamepad selection state |
+| Game Flow | `GameManager`, `PauseControl`, `ApplicationController` | Initialization, system wiring, pause ownership, scene/resolution management |
 | Audio | `AudioEmitter` | Object-level, reusable across scene prefabs |
-| UI | `UIController`, `UIHealthBar`, `ObjectiveUI` | Driven by events from gameplay systems |
-| Game Flow | `GameManager` | Initialization, system wiring, state coordination |
+| VR | `VRFollowCamera`, `FixOpenXrDpad` | World-space panel follow camera; OpenXR D-Pad layout fix |
 
 ---
 
 ## Screenshots
 
-### Main Scene
+### Gameplay Scene
 
 <table align="center">
   <tr>
@@ -118,7 +127,16 @@ Managers are intentionally not implemented as singletons. Serialized references 
 ## Project Notes
 
 - Developed as a presentation-focused educational prototype
-- Approximately 8 weeks of development
+- Approximately 8 weeks of development, followed by VR support
+- Repository contains scripts and documentation only
+
+---
+
+## Documentation
+
+- [Architecture](Docs/Architecture.md)
+- [VR Integration](Docs/VR_Integration.md)
+- [ChangeLog](Docs/CHANGELOG.md)
 
 ---
 
@@ -127,8 +145,9 @@ Managers are intentionally not implemented as singletons. Serialized references 
 - Unity 6 (6000.3.8f1)
 - C#
 - Universal Render Pipeline (URP)
-- Unity Input System
-- Cinemachine
-- TextMeshPro
+- Unity Input System (1.18.0)
+- Cinemachine (3.1.6)
+- XR Interaction Toolkit (3.2.3)
+- OpenXR (1.16.1)
 
 ---
